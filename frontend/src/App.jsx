@@ -1,5 +1,6 @@
 import './App.css'
 import logo from './assets/logo.png'
+import { TaskCard } from './components/TaskCard'
 import { tasks } from './data/tasks'
 
 function App() {
@@ -8,6 +9,13 @@ function App() {
   const progress = tasks.filter((task) => task?.status === 'progress')
   const done = tasks.filter((task) => task?.status === 'done')
 
+  const handleEdit = (task) => {
+    console.log('Editar:', task);
+  };
+
+  const handleDelete = (id) => {
+    console.log('Excluir ID:', id);
+  };
 
   return ( 
     <>
@@ -39,87 +47,16 @@ function App() {
 
              <div className="column-content">
                <ul className='task-items'>
-                <li className="task-item">
-                  <div className="task-item-box">
-                      <div className="task-item-header-box">
-                          <h3>Tarefa 01</h3>
-                          <div className="task-item-actions">
-                            <button type="button" className="task-item-btn"
-                              aria-label="Editar tarefa">✏️</button>
-
-                            <button type="button" className="task-item-btn"
-                              aria-label="Excluir tarefa" >❌</button>
-                          </div>
-                      </div>
-                      <div className="task-item-description-box">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                          A facilis sint laudantium in, cum ad placeat enim repellat
-                          earum sapiente minima doloremque.</p>
-                      </div>
-                    </div>
-                </li>
-                <li className="task-item">
-                  <div className="task-item-box">
-                      <div className="task-item-header-box">
-                          <h3>Tarefa 02</h3>
-
-                          <div className="task-item-actions">
-                            <button type="button" className="task-item-btn"
-                              aria-label="Editar tarefa">✏️</button>
-
-                            <button type="button" className="task-item-btn"
-                              aria-label="Excluir tarefa" > ❌ </button>
-                          </div>
-                      </div>
-
-                      <div className="task-item-description-box">
-                        <p></p>
-                      </div>
-
-                    </div>
-                </li>
-                <li className="task-item">
-                  <div className="task-item-box">
-                      <div className="task-item-header-box">
-                          <h3>Tarefa 03</h3>
-
-                          <div className="task-item-actions">
-                            <button type="button" className="task-item-btn"
-                              aria-label="Editar tarefa">✏️</button>
-
-                            <button type="button" className="task-item-btn"
-                              aria-label="Excluir tarefa" > ❌ </button>
-                          </div>
-                      </div>
-
-                      <div className="task-item-description-box">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                          A facilis sint laudantium in, cum ad placeat enim repellat
-                          earum sapiente minima doloremque.</p>
-                      </div>
-
-                    </div>
-                </li>
-                <li className="task-item">
-                  <div className="task-item-box">
-                      <div className="task-item-header-box">
-                          <h3>Tarefa 04</h3>
-
-                          <div className="task-item-actions">
-                            <button type="button" className="task-item-btn"
-                              aria-label="Editar tarefa">✏️</button>
-
-                            <button type="button" className="task-item-btn"
-                              aria-label="Excluir tarefa" > ❌ </button>
-                          </div>
-                      </div>
-
-                      <div className="task-item-description-box">
-                        <p></p>
-                      </div>
-
-                    </div>
-                </li>
+                  { 
+                    todo.map((task) => (
+                      <TaskCard 
+                        key={task.id}
+                        task={task}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                      />
+                    ))
+                  }
               </ul>
             </div>
           </div>
