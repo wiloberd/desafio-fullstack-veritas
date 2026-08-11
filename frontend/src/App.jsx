@@ -1,7 +1,13 @@
 import './App.css'
 import logo from './assets/logo.png'
+import { tasks } from './data/tasks'
 
 function App() {
+
+  const todo = tasks.filter((task) => task?.status === 'todo')
+  const progress = tasks.filter((task) => task?.status === 'progress')
+  const done = tasks.filter((task) => task?.status === 'done')
+
 
   return ( 
     <>
@@ -27,7 +33,7 @@ function App() {
             <div className="column-header">
               <div>
                 <h2>A Fazer</h2>
-                <p className="task-count">0 tarefas</p>
+                <p className="task-count">{todo.length} tarefas</p>
               </div>
             </div>
 
@@ -42,7 +48,7 @@ function App() {
                               aria-label="Editar tarefa">✏️</button>
 
                             <button type="button" className="task-item-btn"
-                              aria-label="Excluir tarefa" > ❌ </button>
+                              aria-label="Excluir tarefa" >❌</button>
                           </div>
                       </div>
                       <div className="task-item-description-box">
@@ -122,7 +128,7 @@ function App() {
             <div className="column-header">
               <div>
                 <h2>Em Progresso</h2>
-                <p className="task-count">0 tarefas</p>
+                <p className="task-count">{progress.length} tarefas</p>
               </div>
             </div>
           </div>
@@ -131,7 +137,7 @@ function App() {
             <div className="column-header">
               <div>
                 <h2>Concluído</h2>
-                <p className="task-count">0 tarefas</p>
+                  <p className="task-count">{done.length} tarefas</p>
               </div>
             </div>
           </div>
