@@ -57,7 +57,7 @@ function App() {
                       />
                     ))
                   }
-              </ul>
+                </ul>
             </div>
           </div>
 
@@ -68,6 +68,21 @@ function App() {
                 <p className="task-count">{progress.length} tarefas</p>
               </div>
             </div>
+
+            <div className="column-content">
+               <ul className='task-items'>
+                  { 
+                    progress.map((task) => (
+                      <TaskCard 
+                        key={task.id}
+                        task={task}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                      />
+                    ))
+                  }
+                </ul>
+            </div>
           </div>
 
           <div className="kanban-column">
@@ -77,7 +92,22 @@ function App() {
                   <p className="task-count">{done.length} tarefas</p>
               </div>
             </div>
-          </div>
+
+            <div className="column-content">
+               <ul className='task-items'>
+                  { 
+                    done.map((task) => (
+                      <TaskCard 
+                        key={task.id}
+                        task={task}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                      />
+                    ))
+                  }
+                </ul>
+              </div>
+            </div>
         </section>
       </main>
     </>
