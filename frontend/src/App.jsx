@@ -1,13 +1,30 @@
+import { useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
 import { TaskCard } from './components/TaskCard'
+import { TaskForm } from './components/TaskForm'
 import { tasks } from './data/tasks'
 
 function App() {
+  const [isFormOpen, setIsFormOpen] = useState(true)
 
   const todo = tasks.filter((task) => task?.status === 'todo')
   const progress = tasks.filter((task) => task?.status === 'progress')
   const done = tasks.filter((task) => task?.status === 'done')
+
+
+
+
+
+  const handleCreateTask = (taskData) => {
+    const newTask = {
+      title: taskData.title,
+      description: taskData.description,
+      status: 'todo',
+    }
+
+    
+  }
 
   const handleEdit = (task) => {
     console.log('Editar:', task);
@@ -47,6 +64,14 @@ function App() {
 
              <div className="column-content">
                <ul className='task-items'>
+
+                  {isFormOpen && (
+                    <TaskForm
+                      onSubmit={handleCreateTask}
+                      onCancel={() => setIsFormOpen(false)}
+                    />
+                  )}
+                  
                   { 
                     todo.map((task) => (
                       <TaskCard 
