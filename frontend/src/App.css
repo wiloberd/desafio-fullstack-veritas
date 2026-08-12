@@ -109,3 +109,81 @@
   flex-direction: row;
   justify-content: end;
 }
+
+/* TaskForm Create Style */
+.task-form-box {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Campos do TaskForm */
+.task-form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.task-form-input, .task-form-textarea {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+.task-form-textarea {
+  field-sizing: content;
+
+  min-height: 80px;
+  max-height: 120px; 
+  resize: none;
+}
+
+.task-form-input:focus, .task-form-textarea:focus {
+  border-color: #0066cc;
+}
+
+/* Erros FormFields */
+.task-form-input-error {
+  border-color: #d93025;
+}
+
+.task-form-error-msg {
+  color: #d93025;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Botões */
+.task-form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.task-form-btn {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.task-form-btn-primary {
+  background-color: #0066cc;
+  color: white;
+}
+
+.task-form-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.task-form-btn-secondary {
+  background-color: #f0f0f0;
+  color: #333333;
+}

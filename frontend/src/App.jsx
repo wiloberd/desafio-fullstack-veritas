@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
 import { TaskCard } from './components/kanban/TaskCard'
-import { TaskForm } from './components/kanban/TaskForm'
+import { TaskCreateForm } from './components/kanban/TaskCreateForm'
 import { tasks } from './data/tasks'
 
 function App() {
@@ -66,7 +66,7 @@ function App() {
                <ul className='task-items'>
 
                   {isFormOpen && (
-                    <TaskForm
+                    <TaskCreateForm
                       onSubmit={handleCreateTask}
                       onCancel={() => setIsFormOpen(false)}
                     />
