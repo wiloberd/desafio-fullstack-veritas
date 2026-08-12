@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { validateTask } from "../../utils/taskValidationsFields"
 
 export function TaskForm({ onSubmit, onCancel }) {
     const [errors, setErrors] = useState([])
@@ -10,27 +11,10 @@ export function TaskForm({ onSubmit, onCancel }) {
         const title = form.title.value.trim()
         const description = form.description.value.trim()
 
-        const titleWords = title.split(/\s+/).filter(Boolean)
-        const descriptionWords = description.split(/\s+/).filter(Boolean)
-
-        const validationErrors = []
-
-        if (titleWords.length < 2) {
-          alert(`Erro título deve ter pelo menos duas palavras. ${titleWords}`)
-          validationErrors.push({
-            field: "title",
-            message: "O título deve conter pelo menos 2 palavras.",
-          })
-        }
         
-        if (descriptionWords.length > 60) {
-          validationErrors.push({
-            field: "description",
-            message: "A descrição não deve ultrapassar 60 palavras.",
-          })
-        }
+        // Executa a lógica de validação de campos
+        const validationErrors = validateTask({ title, description })
 
-        
         if (validationErrors.length > 0) {
           setErrors(validationErrors)
           return
@@ -40,12 +24,6 @@ export function TaskForm({ onSubmit, onCancel }) {
         onSubmit({ title, description })
       }
 
-
-    useEffect(() => {
-      if (errors.length > 0) {
-        console.log("Estado 'errors' atualizado no React:", errors)
-      }
-    }, [errors])
 
   return (
     <form onSubmit={handleSubmit}>
