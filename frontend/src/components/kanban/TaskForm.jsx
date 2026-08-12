@@ -24,15 +24,50 @@ export function TaskForm({ onSubmit, onCancel }) {
         onSubmit({ title, description })
       }
 
+    
+    function getFieldError(fieldName) {
+        const errorObj = errors.find((err) => err.field === fieldName)
+        return errorObj ? errorObj.message : null
+      }
+
+    function handleClearError(fieldName) {
+        setErrors((prevErrors) => prevErrors.filter((err) => err.field !== fieldName))
+      }
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="text" name="title" placeholder="Título da tarefa" required/>
-      <textarea name="description" placeholder="Descrição da tarefa"/>
+      <div>
+        <input 
+          type="text" 
+          name="title" 
+          placeholder="Título da tarefa" 
+          required
+          onChange={() => handleClearError("title")}
+          />
+        {getFieldError("title") && (
+          <span style={{ color: "red", display: "block" }}>
+            {getFieldError("title")}
+          </span>
+        )}
+      </div>
 
+      <div>
+        <textarea 
+          name="description" 
+          placeholder="Descrição da tarefa (Opcional)"
+          onChange={() => handleClearError("description")}
+          />
+         {getFieldError("description") && (
+          <span style={{ color: "red", display: "block" }}>
+            {getFieldError("description")}
+          </span>
+        )}
+      </div>
 
-      <button type="submit">Criar tarefa</button>
-      <button type="button" onClick={onCancel}> Cancelar </button>
+      <div>
+        <button type="submit">Criar tarefa</button>
+        <button type="button" onClick={onCancel}> Cancelar </button>
+      </div>
     </form>
   )
 }
