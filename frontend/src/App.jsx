@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
-import { TaskCard } from './components/TaskCard'
-import { TaskForm } from './components/TaskForm'
+import { TaskCard } from './components/kanban/TaskCard'
+import { TaskForm } from './components/kanban/TaskForm'
 import { tasks } from './data/tasks'
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
       status: 'todo',
     }
 
-    
+
   }
 
   const handleEdit = (task) => {
