@@ -175,7 +175,10 @@
 .task-form-field {
   display: flex;
   flex-direction: column;
-  margin-bottom: 8px;
+}
+
+.task-form-field textarea {
+  margin: 8px 0px;
 }
 
 .task-form-input, .task-form-textarea {

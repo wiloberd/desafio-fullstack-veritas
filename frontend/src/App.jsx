@@ -65,12 +65,7 @@ function App() {
              <div className="column-content">
                <ul className='task-items'>
 
-                  {isFormOpen && (
-                    <TaskCreateForm
-                      onSubmit={handleCreateTask}
-                      onCancel={() => setIsFormOpen(false)}
-                    />
-                  )}
+                  <TaskCreateForm onSubmit={handleCreateTask} onCancel={() => setIsFormOpen(false)}/>
                   
                   { 
                     todo.map((task) => (

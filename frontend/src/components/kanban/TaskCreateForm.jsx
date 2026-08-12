@@ -3,6 +3,7 @@ import { validateTask } from "../../utils/taskValidationsFields"
 
 export function TaskCreateForm({ onSubmit, onCancel }) {
     const [errors, setErrors] = useState([])
+    const [isExpanded, setIsExpanded] = useState(false)
 
     function handleSubmit(event) {
         event.preventDefault()
@@ -41,10 +42,11 @@ export function TaskCreateForm({ onSubmit, onCancel }) {
           <input 
             type="text" 
             name="title" 
-            placeholder="Título da tarefa" 
+            placeholder="Adicionar tarefa" 
             className={`task-form-input ${getFieldError("title") ? "task-form-input-error" : ""}`}
-            required
+            onFocus={() => setIsExpanded(true)}
             onChange={() => handleClearError("title")}
+            required
             />
           {getFieldError("title") && (
             <span className="task-form-error-msg">
@@ -53,30 +55,41 @@ export function TaskCreateForm({ onSubmit, onCancel }) {
           )}
         </div>
 
-        <div className="task-form-field">
-          <textarea 
-            name="description" 
-            placeholder="Descrição da tarefa (Opcional)"
-            className={`task-form-textarea ${getFieldError("description") ? "task-form-input-error" : ""}`}
-            onChange={() => handleClearError("description")}
-            />
-          {getFieldError("description") && (
-            <span className="task-form-error-msg">
-              {getFieldError("description")}
-            </span>
-          )}
-        </div>
+        {isExpanded && (
+          <>
+            <div className="task-form-field">
+              <textarea 
+                name="description" 
+                placeholder="Descrição da tarefa (Opcional, máx. 60 palavras)"
+                className={`task-form-textarea ${getFieldError("description") ? "task-form-input-error" : ""}`}
+                onChange={() => handleClearError("description")}
+                />
+              {getFieldError("description") && (
+                <span className="task-form-error-msg">
+                  {getFieldError("description")}
+                </span>
+              )}
+            </div>
 
-        <div className="task-form-actions">
-          <button 
-            type="submit" 
-            className="task-form-btn task-form-btn-primary"
-            disabled={errors.length > 0}>
-              Criar tarefa
-            </button>
+            <div className="task-form-actions">
+              <button 
+                type="submit" 
+                className="task-form-btn task-form-btn-primary"
+                disabled={errors.length > 0}>
+                  Criar tarefa
+                </button>
 
-          <button type="button" className="task-form-btn task-form-btn-secondary" onClick={onCancel}> Cancelar </button>
-        </div>
+              <button type="button" 
+                      className="task-form-btn task-form-btn-secondary" 
+                      onClick={() => {
+                        setIsExpanded(false)
+                        onCancel?.()
+                      }}>
+                      Cancelar 
+                    </button>
+            </div>
+          </>
+        )}
       </div>
     </form>
   )
