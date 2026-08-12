@@ -55,7 +55,7 @@ function App() {
 
         <section className="kanban-board">
           <div className="kanban-column">
-            <div className="column-header">
+            <div className="column-header column-header-todo">
               <div>
                 <h2>A Fazer</h2>
                 <p className="task-count">{todo.length} tarefas</p>
@@ -87,7 +87,7 @@ function App() {
           </div>
 
           <div className="kanban-column">
-            <div className="column-header">
+            <div className="column-header column-header-progress">
               <div>
                 <h2>Em Progresso</h2>
                 <p className="task-count">{progress.length} tarefas</p>
@@ -111,7 +111,7 @@ function App() {
           </div>
 
           <div className="kanban-column">
-            <div className="column-header">
+            <div className="column-header column-header-done">
               <div>
                 <h2>Concluído</h2>
                   <p className="task-count">{done.length} tarefas</p>
