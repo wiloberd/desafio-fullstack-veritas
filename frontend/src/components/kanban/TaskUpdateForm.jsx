@@ -50,7 +50,6 @@ export function TaskUpdateForm({ task, onUpdate, onCancel }) {
                   placeholder="Adicionar tarefa" 
                   defaultValue={task?.title || ""}
                   className={`task-form-input ${getFieldError("title") ? "task-form-input-error" : ""}`}
-                  onFocus={() => setIsExpanded(true)}
                   onChange={() => handleClearError("title")}
                   required
                   />
@@ -85,7 +84,6 @@ export function TaskUpdateForm({ task, onUpdate, onCancel }) {
                 <button type="button" 
                   className="task-form-btn task-form-btn-secondary" 
                   onClick={() => {
-                    setIsExpanded(false)
                     onCancel?.()
                   }}>
                   Cancelar 

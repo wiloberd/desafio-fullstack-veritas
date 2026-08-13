@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
 import { TaskCard } from './components/kanban/TaskCard'
 import { TaskCreateForm } from './components/kanban/TaskCreateForm'
 import { tasks } from './data/tasks'
+import { TaskUpdateForm } from './components/kanban/TaskUpdateForm'
 
 function App() {
   const [isFormOpen, setIsFormOpen] = useState(true)
+  const [editingTaskId, setEditingTaskId] = useState(null)
 
   const todo = tasks.filter((task) => task?.status === 'todo')
   const progress = tasks.filter((task) => task?.status === 'progress')
@@ -28,6 +30,7 @@ function App() {
 
   const handleEdit = (task) => {
     console.log('Editar:', task);
+    setEditingTaskId(task.id)
   };
 
   const handleDelete = (id) => {
@@ -65,18 +68,25 @@ function App() {
              <div className="column-content">
                <ul className='task-items'>
 
-                  <TaskCreateForm onSubmit={handleCreateTask} onCancel={() => setIsFormOpen(false)}/>
+                  <TaskCreateForm onSubmit={handleCreateTask}/>
                   
-                  { 
-                    todo.map((task) => (
-                      <TaskCard 
-                        key={task.id}
+                   {todo.map((task) => (
+                    <React.Fragment key={task.id}>
+                      <TaskCard
                         task={task}
                         onEdit={handleEdit}
                         onDelete={handleDelete}
                       />
-                    ))
-                  }
+
+                      {editingTaskId === task.id && (
+                        <TaskUpdateForm
+                          task={task}
+                          onUpdate={handleEdit}
+                          onCancel={() => setEditingTaskId(null)}
+                        />
+                      )}
+                    </React.Fragment>
+                  ))}
                 </ul>
             </div>
           </div>

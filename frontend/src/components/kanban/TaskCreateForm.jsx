@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { validateTask } from "../../utils/taskValidationsFields"
 
-export function TaskCreateForm({ onSubmit, onCancel }) {
+export function TaskCreateForm({ onSubmit  }) {
     const [errors, setErrors] = useState([])
     const [isExpanded, setIsExpanded] = useState(false)
 
@@ -24,6 +24,14 @@ export function TaskCreateForm({ onSubmit, onCancel }) {
         setErrors([])
         onSubmit({ title, description })
       }
+
+    function handleCancel(event) {
+      event?.preventDefault()
+      event?.currentTarget.closest("form")?.reset()
+
+      setErrors([])
+      setIsExpanded(false)
+    }
 
     
     function getFieldError(fieldName) {
@@ -81,10 +89,7 @@ export function TaskCreateForm({ onSubmit, onCancel }) {
 
               <button type="button" 
                       className="task-form-btn task-form-btn-secondary" 
-                      onClick={() => {
-                        setIsExpanded(false)
-                        onCancel?.()
-                      }}>
+                      onClick={handleCancel}>
                       Cancelar 
                     </button>
             </div>
