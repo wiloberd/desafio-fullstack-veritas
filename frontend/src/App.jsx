@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
-import { TaskCard } from './components/kanban/TaskCard'
 import { TaskCreateForm } from './components/kanban/TaskCreateForm'
 import { tasks } from './data/tasks'
-import { TaskUpdateForm } from './components/kanban/TaskUpdateForm'
+import { TaskList } from './components/kanban/TaskList'
 
 function App() {
   const [isFormOpen, setIsFormOpen] = useState(true)
@@ -24,16 +23,14 @@ function App() {
       description: taskData.description,
       status: 'todo',
     }
+  };
 
-
-  }
-
-  const handleEdit = (task) => {
+  const handleUpdateTask = (task) => {
     console.log('Editar:', task);
     setEditingTaskId(task.id)
   };
 
-  const handleDelete = (id) => {
+  const handleDeleteTask = (id) => {
     console.log('Excluir ID:', id);
   };
 
@@ -66,29 +63,17 @@ function App() {
             </div>
 
              <div className="column-content">
-               <ul className='task-items'>
+                  <TaskCreateForm onSubmit={handleCreateTask} />
 
-                  <TaskCreateForm onSubmit={handleCreateTask}/>
-                  
-                   {todo.map((task) => (
-                    <React.Fragment key={task.id}>
-                      <TaskCard
-                        task={task}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                      />
-
-                      {editingTaskId === task.id && (
-                        <TaskUpdateForm
-                          task={task}
-                          onUpdate={handleEdit}
-                          onCancel={() => setEditingTaskId(null)}
-                        />
-                      )}
-                    </React.Fragment>
-                  ))}
-                </ul>
-            </div>
+                  <TaskList
+                    tasks={todo}
+                    editingTaskId={editingTaskId}
+                    onEdit={(id) => setEditingTaskId(id)}
+                    onDelete={handleDeleteTask}
+                    onUpdate={handleUpdateTask}
+                    onCancelEdit={() => setEditingTaskId(null)}
+                  />
+              </div>
           </div>
 
           <div className="kanban-column">
@@ -100,18 +85,14 @@ function App() {
             </div>
 
             <div className="column-content">
-               <ul className='task-items'>
-                  { 
-                    progress.map((task) => (
-                      <TaskCard 
-                        key={task.id}
-                        task={task}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                      />
-                    ))
-                  }
-                </ul>
+                <TaskList
+                    tasks={progress}
+                    editingTaskId={editingTaskId}
+                    onEdit={(id) => setEditingTaskId(id)}
+                    onDelete={handleDeleteTask}
+                    onUpdate={handleUpdateTask}
+                    onCancelEdit={() => setEditingTaskId(null)}
+                  />
             </div>
           </div>
 
@@ -124,18 +105,14 @@ function App() {
             </div>
 
             <div className="column-content">
-               <ul className='task-items'>
-                  { 
-                    done.map((task) => (
-                      <TaskCard 
-                        key={task.id}
-                        task={task}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                      />
-                    ))
-                  }
-                </ul>
+                <TaskList
+                    tasks={done}
+                    editingTaskId={editingTaskId}
+                    onEdit={(id) => setEditingTaskId(id)}
+                    onDelete={handleDeleteTask}
+                    onUpdate={handleUpdateTask}
+                    onCancelEdit={() => setEditingTaskId(null)}
+                  />
               </div>
             </div>
         </section>
