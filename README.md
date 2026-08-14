@@ -17,6 +17,7 @@ Certifique-se de ter instalado em sua máquina:
 - [Go](https://go.dev/) (versão 1.26 ou superior)
 
 ### 2.Frontend:
+
 #### Navegue até o diretório do Frontend (cd frontend):
 Instale as dependências:
 - npm install
@@ -26,12 +27,16 @@ Inicie o servidor:
 
 ### 3. Backend:
 #### Navegue até o diretório do (cd backend):
+
+Crie o arquivo de variáveis (Caso necessário, ajuste a porta PORT no arquivo .env):
+- cp .env.example .env
+
 Instale as dependências:
 - go mod tidy
 
 Inicie o servidor:
-- go run main.go
-
+- go run ./cmd/server
+O servidor iniciará por padrão em http://localhost:8080
 
 ## Funcionalidades
 
@@ -43,7 +48,6 @@ Inicie o servidor:
 
 
 ## Decisões Técnicas
-
 ### 1.Frontend: React
 
 - **Abstração modular da lista de tarefas (`TaskList` / `TaskListItem`):** Encapsulamento da lógica de mapeamento e alternância entre visualização e edição, garantindo o princípio DRY e código limpo nas colunas.
@@ -59,16 +63,26 @@ Inicie o servidor:
 
 
 ### 2. Backend
-- 
+
+- **Arquitetura modular em camadas simples (cmd/, configs/, internal/):** Organização inspirada no Standard Go Project Layout, separando o ponto de entrada (cmd/server), configurações de ambiente (configs/), roteamento (server/), manipuladores HTTP (handler/) e modelos de dados (model/).
+
+- **Gerenciamento de Estado Concorrente com Mutex (sync.Mutex):** Utilização de sync.Mutex para proteger a manipulação e o incremento de ID das tarefas em memória, prevenindo Race Conditions em acessos simultâneos à API.
+
+- **Middleware CORS Nativo:** Implementação de cabeçalhos HTTP para liberação de Cross-Origin Resource Sharing (CORS), permitindo requisições seguras vindas do Frontend React.
+
+- **Respostas JSON Padronizadas e Validações de Payload:** Tratamento de erros HTTP (400 Bad Request, 404 Not Found, 500 Internal Server Error) com payloads e estruturas em JSON usando struct tags (json:"id", json:"title", etc.).
 
 ## Limitações conhecidas
-
 ### 1.Frontend: React
+
 - **Responsividade e Ajustes de Layout:**
   A interface foi desenvolvida prioritariamente para resoluções padrão de desktop. Necessita de ajustes de CSS (Media Queries, Flexbox/Grid e escala tipográfica relativa) para garantir um comportamento responsivo completo em múltiplos tamanhos de tela (notebooks menores, monitores ultrawide e dispositivos móveis).
 
 ### 2. Backend
-- 
+
+- **Cobertura Inicial de Testes Automatizados:** Foram implementados apenas testes unitários/de integração primários para os componentes críticos.
+
+- **Ampliação da Cobertura de Testes Automatizados:** Implementar testes unitários para a camada de manipuladores de rotas (`httptest`).
 
 
 ## Melhorias futuras
@@ -80,4 +94,5 @@ Inicie o servidor:
 - Substituir os avisos nativos do navegador por componentes visuais customizados (Toast notifications ou Modais estilizados com CSS).
 
 ### 2. Backend
-- 
+
+- **Gerenciamento de Logging por Ambiente:** Substituir o pacote padrão `log` por um logger estruturado (como `zap` ou `slog` nativo do Go) para alterar o nível de log (Debug, Info, Error) e o destino da saída (console vs. arquivo) dependendo do ambiente (`ENV=development` ou `production`).
