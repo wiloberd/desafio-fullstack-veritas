@@ -1,0 +1,26 @@
+
+services:
+  backend:
+    build:
+      context: ./backend 
+      dockerfile: Dockerfile
+    container_name: kanban-api
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/data:/app/data 
+    environment:
+      # Sobrescreve o comportamento padrão do Go apenas dentro do Docker
+      - HOST=0.0.0.0
+      - PORT=8080
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: kanban-web
+    ports:
+      # Mapeia a porta nativa do Vite
+      - "5173:5173" 
+    depends_on:
+      - backend
