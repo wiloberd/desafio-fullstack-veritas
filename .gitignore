@@ -27,6 +27,7 @@ dist-ssr
 # Arquivos de ambiente e segredos
 .env
 
+
 # Executáveis e compilação do Go
 *.exe
 *.exe~
@@ -37,5 +38,5 @@ backend/server
 server
 
 # Banco de dados local SQLite
-*.db
+*backend/data/kanban.db
 *.db-journal
