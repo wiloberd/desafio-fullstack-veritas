@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"kanban-api/internal/dto"
 	"kanban-api/internal/model"
 	"kanban-api/internal/repository"
 	"net/http"
@@ -46,7 +47,7 @@ func (h *TaskHandler) TaskByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Extrai o ID do final da URL
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/tasks/")
-	
+
 	if idStr == "" {
 		RespondWithJSON(w, http.StatusBadRequest, map[string]string{"error": "ID da tarefa é obrigatório"})
 		return
@@ -120,32 +121,42 @@ func (h *TaskHandler) getTaskByID(w http.ResponseWriter, idStr string) {
 }
 
 func (h *TaskHandler) createTask(w http.ResponseWriter, r *http.Request) {
-	var task model.Task
+	var input dto.CreateTaskInput
 
-	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
+	// 1. Cria o decoder
+	decoder := json.NewDecoder(r.Body)
+
+	// 2. 🔒 Ativa a rejeição estrita de campos que não pertencem ao DTO
+	decoder.DisallowUnknownFields()
+
+	// 3. Tenta decodificar
+	if err := decoder.Decode(&input); err != nil {
+		if strings.Contains(err.Error(), "unknown field") {
+			RespondWithJSON(w, http.StatusBadRequest, map[string]any{
+				"error":           "O payload contém campos não permitidos",
+				"expectedFields": []string{"title", "description"},
+			})
+			return
+		}
+
 		RespondWithJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "Payload inválido",
+			"error": "Formato JSON inválido",
 		})
 		return
 	}
 
-	if task.Title == "" {
+	if strings.TrimSpace(input.Title) == "" {
 		RespondWithJSON(w, http.StatusBadRequest, map[string]string{
 			"error": "O título é obrigatório",
 		})
 		return
 	}
 
-	if task.Status == "" {
-		task.Status = model.StatusTodo
-	}
-
-	if !task.Status.IsValid() {
-		RespondWithJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "Status inválido",
-		})
-		return
-	}
+	task := model.Task{
+			Title:       input.Title,
+			Description: input.Description,
+			Status:      model.StatusTodo,
+		}
 
 	if err := h.repo.Create(&task); err != nil {
 		RespondWithJSON(w, http.StatusInternalServerError, map[string]string{
@@ -159,32 +170,48 @@ func (h *TaskHandler) createTask(w http.ResponseWriter, r *http.Request) {
 
 
 func (h *TaskHandler) updateTask(w http.ResponseWriter, r *http.Request, idStr string) {
-	var task model.Task
+	var input dto.UpdateTaskInput
 
-	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
+	// 1. Decoder com rejeição estrita de campos desconhecidos (ex: "id", "created_at", etc.)
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode(&input); err != nil {
+		if strings.Contains(err.Error(), "unknown field") {
+			RespondWithJSON(w, http.StatusBadRequest, map[string]any{
+				"error":           "O payload contém campos não permitidos",
+				"expected_fields": []string{"title", "description", "status"},
+			})
+			return
+		}
+
 		RespondWithJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "Payload inválido",
+			"error": "Formato JSON inválido",
 		})
 		return
 	}
 
-	// Garante que o ID da URL sobrescreve qualquer ID vindo no corpo da requisição
-	task.ID = idStr
-
-	if task.Title == "" {
+	if strings.TrimSpace(input.Title) == "" {
 		RespondWithJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "O título é obrigatório",
+			"error": "O campo 'title' é obrigatório",
 		})
 		return
 	}
 
-	if !task.Status.IsValid() {
+	if !input.Status.IsValid() {
 		RespondWithJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "Status inválido",
+			"error": "Status inválido. Valores permitidos: 'todo', 'in_progress', 'done'",
 		})
 		return
 	}
 
+	task := model.Task{
+		ID:          idStr,
+		Title:       input.Title,
+		Description: input.Description,
+		Status:      input.Status,
+	}
+	
 	if err := h.repo.Update(task); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			RespondWithJSON(w, http.StatusNotFound, map[string]string{
@@ -224,7 +251,7 @@ func (h *TaskHandler) deleteTask(w http.ResponseWriter, idStr string) {
 		return
 	}
 
-	RespondWithJSON(w, http.StatusOK, map[string]string{
+	RespondWithJSON(w, http.StatusOK, map[string]string {
 		"message": "Tarefa excluída com sucesso",
 	})
 }
