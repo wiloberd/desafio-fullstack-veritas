@@ -26,10 +26,24 @@ Inicie o servidor:
 - npm run dev
 
 ### 3. Backend:
+#### Configurando o Banco de Dados de Teste (Opcional)
+Para facilitar a avaliação e testes da API, este repositório inclui um banco de dados SQLite pré-populado na raiz do projeto (`kanban.db`). 
+
+Para utilizá-lo, você precisa copiar o arquivo para dentro da pasta `data`, pois é o local padrão que a aplicação utiliza para persistência.
+
+Execute os comandos abaixo no terminal, na raiz do projeto `backend`:
+
+**No Linux ou macOS:**
+- cp kanban.db data/kanban.db
+
+**No Windows (CMD ou PowerShell)**
+- copy kanban.db data\kanban.db
+
 #### Navegue até o diretório do (cd backend):
 
 Crie o arquivo de variáveis (Caso necessário, ajuste a porta PORT no arquivo .env):
-- cp .env.example .env
+- cp .env.example .env (no LInux ou macOS) 
+- copy .env.example .env (CMD ou PowerShell) 
 
 Instale as dependências:
 - go mod tidy
@@ -105,3 +119,14 @@ O servidor iniciará por padrão em http://localhost:8080
 ### 2. Backend
 
 - **Gerenciamento de Logging por Ambiente:** Substituir o pacote padrão `log` por um logger estruturado (como `zap` ou `slog` nativo do Go) para alterar o nível de log (Debug, Info, Error) e o destino da saída (console vs. arquivo) dependendo do ambiente (`ENV=development` ou `production`).
+
+
+### Segurança e Configurações Globais (Middleware)
+
+A API utiliza um **Middleware de Cabeçalhos Globais** customizado para interceptar e tratar requisições HTTP antes que elas alcancem os *handlers* da regra de negócio. As principais responsabilidades dessa camada incluem:
+
+*   **CORS Dinâmico:** Gerenciamento rigoroso das políticas de *Cross-Origin Resource Sharing* (CORS). A origem permitida não é "hardcoded", sendo lida diretamente da variável de ambiente `CORS_ALLOWED_ORIGINS`. 
+
+*   **Tratamento Otimizado de Preflight (OPTIONS):** O middleware intercepta globalmente as requisições `OPTIONS` disparadas pelos navegadores, respondendo imediatamente com o status correto (permitindo o fluxo seguro) sem que essa requisição transite desnecessariamente pela lógica dos controladores.
+
+*   **Isolamento de Responsabilidades:** Ao centralizar a injeção de cabeçalhos de segurança e métodos permitidos no roteador principal, os *handlers* (`TaskHandler`) mantêm-se limpos, enxutos e focados exclusivamente na manipulação das entidades do domínio.
