@@ -1,0 +1,243 @@
+.app {
+    width: 100vw;
+    height: 100vh;
+    padding: 20px;
+    background: rgb(247, 250, 253);
+    display: grid;
+    grid-template-rows: auto 2fr;
+    gap: 1rem;
+}
+
+.app-header {
+  background: rgb(255, 255, 255);
+  height: fit-content;
+}
+
+.kanban-header {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  gap: 1rem;
+}
+
+.app-brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-logo img {
+  max-width: 8rem;
+}
+
+.kanban-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: .5rem;
+  text-align: center;
+  background: #0066cc;
+  color: #fff;
+}
+
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  background: transparent;
+}
+
+.column-header {
+  border-radius: 4px 4px 0 0;
+  color: white;
+  padding:  2px 8px;
+}
+
+.column-header-todo {
+  background: #942727;
+}
+
+.column-header-progress {
+  background: rgb(214, 151, 34);
+}
+
+.column-header-progress h2, .column-header-progress p {
+  color: black;
+}
+
+.column-header-done {
+  background: green;
+}
+
+.kanban-column {
+  display: grid;
+  grid-template-rows: 1fr 5fr;
+
+  padding: 8px;
+  border-radius: 12px;
+  background: #f0f0f0;
+  gap: .5rem;
+
+}
+
+.column-content{
+  overflow-y: auto;
+  min-height: 100%;
+  max-height: 12rem;
+}
+
+/* ==========================================================================
+   TASK LIST & TASK ITEM (CARD)
+   ========================================================================== */
+
+.task-items {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.task-item, .task-form-box {
+  /* max-width: 98%; */
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.task-item:hover {
+  border-color: #0066cc;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-item-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 100%;
+}
+
+.task-item-header-box {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  align-items: flex-start;
+  gap: .2rem;
+
+  justify-content: space-between;
+}
+
+.task-item-header-box h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333333;
+  hyphens: auto;
+  word-break: break-word;
+}
+
+.task-item-description-box p {
+  margin: 0;
+  font-size: 13px;
+  color: #666666;
+  line-height: 1.4;
+  hyphens: auto;
+  word-break: break-word;
+}
+
+.task-item-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: .2rem;
+}
+
+.task-item-btn {
+  background: #f0f0f0;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.task-item-btn:hover {
+  background-color: #0066cc;
+}
+
+/* ==========================================================================
+   TaskForm Create Style 
+   ========================================================================== */
+
+/* Campos do TaskForm */
+.task-form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-form-field textarea {
+  margin: 8px 0px;
+}
+
+.task-form-input, .task-form-textarea {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+.task-form-textarea {
+  field-sizing: content;
+
+  min-height: 80px;
+  max-height: 120px; 
+  resize: none;
+}
+
+.task-form-input:focus, .task-form-textarea:focus {
+  border-color: #0066cc;
+}
+
+/* Erros FormFields */
+.task-form-input-error {
+  border-color: #d93025;
+}
+
+.task-form-error-msg {
+  color: #d93025;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Botões */
+.task-form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.task-form-btn {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.task-form-btn-primary {
+  background-color: #0066cc;
+  color: white;
+}
+
+.task-form-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.task-form-btn-secondary {
+  background-color: #f0f0f0;
+  color: #333333;
+}
