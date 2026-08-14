@@ -1,27 +1,45 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
 import { TaskCreateForm } from './components/kanban/TaskCreateForm'
-import { tasks } from './data/tasks'
 import { TaskList } from './components/kanban/TaskList'
+import { taskService } from './services/api'
 
 function App() {
-  const [isFormOpen, setIsFormOpen] = useState(true)
   const [editingTaskId, setEditingTaskId] = useState(null)
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const todo = tasks.filter((task) => task?.status === 'todo')
-  const progress = tasks.filter((task) => task?.status === 'progress')
+  const progress = tasks.filter((task) => task?.status === 'in_progress')
   const done = tasks.filter((task) => task?.status === 'done')
 
 
-
-
-
-  const handleCreateTask = (taskData) => {
-    const newTask = {
+  const handleCreateTask = async (taskData) => {
+    const newTaskPayload = {
       title: taskData.title,
       description: taskData.description,
-      status: 'todo',
+      status: "todo",
+    };
+
+    try {
+      
+      const createdTask = await taskService.createTask(newTaskPayload);
+      // Atualiza o estado adicionando a nova tarefa no final da lista
+      setTasks((prevTasks) => [...prevTasks, createdTask]);
+      
+    } catch (error) {
+      const backendError = error.payload?.error || error.payload?.message;
+      
+      const messageCombined = `${backendError} (Status Code: ${error.status})`
+
+      // Se não vier mensagem do backend, usa uma mensagem fallback com o status
+      const mensagemFinal = backendError ? messageCombined : `Falha na requisição (Status: ${error.status})`;
+      
+      alert('Erro ao criar tarefa: ' + mensagemFinal);
+
+      throw error;
     }
   };
 
@@ -33,6 +51,32 @@ function App() {
   const handleDeleteTask = (id) => {
     console.log('Excluir ID:', id);
   };
+
+  const handleReadTask = async () => {
+    try {
+      setLoading(true);
+
+      // Pausa artificial de 2s de test do loading
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      const data = await taskService.getAllTasks();
+
+      // Se a sua API Go devolve null quando está vazia, garantimos um array vazio:
+      setTasks(data || []); 
+    } catch (err) {
+      setError('Não foi possível carregar o quadro de tarefas.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleReadTask();
+  }, []);
+  
+
+  if (loading) return <div>Carregando quadro...</div>;
+  if (error) return <div style={{ color: 'red' }}>{error}</div>;
 
   return ( 
     <>

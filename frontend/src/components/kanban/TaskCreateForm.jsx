@@ -5,7 +5,7 @@ export function TaskCreateForm({ onSubmit  }) {
     const [errors, setErrors] = useState([])
     const [isExpanded, setIsExpanded] = useState(false)
 
-    function handleSubmit(event) {
+   async function handleSubmit(event) {
         event.preventDefault()
 
         const form = event.currentTarget
@@ -22,7 +22,17 @@ export function TaskCreateForm({ onSubmit  }) {
         }
 
         setErrors([])
-        onSubmit({ title, description })
+        try {
+
+          await onSubmit({ title, description })
+          
+          // 3. Se a API deu sucesso, limpamos tudo com segurança o form!
+          form.reset()
+          setIsExpanded(false)
+          
+        } catch (error) {
+
+        }
       }
 
     function handleCancel(event) {
