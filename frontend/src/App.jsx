@@ -20,12 +20,12 @@ function App() {
     const newTaskPayload = {
       title: taskData.title,
       description: taskData.description,
-      status: "todo",
     };
 
     try {
       
       const createdTask = await taskService.createTask(newTaskPayload);
+      
       // Atualiza o estado adicionando a nova tarefa no final da lista
       setTasks((prevTasks) => [...prevTasks, createdTask]);
       
@@ -43,14 +43,52 @@ function App() {
     }
   };
 
-  const handleUpdateTask = (task) => {
-    console.log('Editar:', task);
-    setEditingTaskId(task.id)
+
+  const handleUpdateTask = async (updatedTask) => {
+     const newTaskPayload = {
+      title: updatedTask.title,
+      description: updatedTask.description,
+      // status: "in_progress",
+    };
+
+    
+    try {
+      const tarefaSalva = await taskService.updateTask(updatedTask.id, newTaskPayload);
+      
+      // 2. Atualiza o array na tela
+      setTasks((prevTasks) => 
+        prevTasks.map((t) => (t.id === updatedTask.id ? tarefaSalva : t))
+      );
+
+      setEditingTaskId(null);
+
+    } catch (error) {
+      const backendError = error.payload?.error || error.payload?.message;
+      alert('Erro ao atualizar tarefa: ' + (backendError || `Status: ${error.status}`));
+      
+      throw error; 
+    }
   };
 
-  const handleDeleteTask = (id) => {
-    console.log('Excluir ID:', id);
+
+  const handleDeleteTask = async (id) => {
+
+    // PopUp para confirmar antes de exluir a tarefa permanente
+    const confirmacao = window.confirm("Tem certeza que deseja excluir esta tarefa?");
+    if (!confirmacao) return;
+
+    try {
+      await taskService.deleteTask(id);
+      
+      // 2. Remove o card da tela instantaneamente filtrando o array
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+      
+    } catch (error) {
+      const backendError = error.payload?.error || error.payload?.message;
+      alert('Erro ao excluir tarefa: ' + (backendError || `Status: ${error.status}`));
+    }
   };
+
 
   const handleReadTask = async () => {
     try {
