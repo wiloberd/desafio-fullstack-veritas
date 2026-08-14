@@ -3,14 +3,17 @@ package configs
 import (
 	"log"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
+	Host   string
 	Port   string
 	DBPath string
 	Env    string
+	CORSAllowedOrigins string
 }
 
 func LoadConfig() *Config {
@@ -20,8 +23,10 @@ func LoadConfig() *Config {
 	}
 
 	return &Config{
-		Port:    os.Getenv("PORT"),
+		Host:	 os.Getenv("HOST"),
+		Port:    strings.TrimPrefix(os.Getenv("PORT"), ":"),
 		DBPath:  os.Getenv("DB_PATH"),
 		Env:     os.Getenv("ENV"),
+		CORSAllowedOrigins: os.Getenv("CORS_ALLOWED_ORIGINS"),
 	}
 }

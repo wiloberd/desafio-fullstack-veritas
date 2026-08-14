@@ -31,15 +31,8 @@ func RespondWithJSON(w http.ResponseWriter, status int, payload any) {
 	}
 }
 
-// setCORS configura os headers padronizados para todas as requisições
-func setCORS(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-}
 
 func (h *TaskHandler) TaskByIDHandler(w http.ResponseWriter, r *http.Request) {
-	setCORS(w)
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return
@@ -66,7 +59,6 @@ func (h *TaskHandler) TaskByIDHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *TaskHandler) TasksHandler(w http.ResponseWriter, r *http.Request) {
-	setCORS(w)
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return
@@ -180,7 +172,7 @@ func (h *TaskHandler) updateTask(w http.ResponseWriter, r *http.Request, idStr s
 		if strings.Contains(err.Error(), "unknown field") {
 			RespondWithJSON(w, http.StatusBadRequest, map[string]any{
 				"error":           "O payload contém campos não permitidos",
-				"expected_fields": []string{"title", "description", "status"},
+				"expectedFields": []string{"title", "description", "status"},
 			})
 			return
 		}
