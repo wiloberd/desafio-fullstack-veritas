@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
 	"strconv"
 
 	"kanban-api/internal/model"
@@ -75,6 +76,21 @@ func (r *SQLiteTaskRepository) GetAll() ([]model.Task, error) {
 	return tasks, nil
 }
 
+func (r *SQLiteTaskRepository) GetByID(id int) (*model.Task, error) {
+	query := `SELECT id, title, description, status FROM tasks WHERE id = ?`
+
+	var t model.Task
+	err := r.db.QueryRow(query, id).Scan(&t.ID, &t.Title, &t.Description, &t.Status)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil // Retorna nil sem erro se não encontrar
+		}
+		return nil, err
+	}
+
+	return &t, nil
+}
+
 // Update an existing task by its ID
 func (r *SQLiteTaskRepository) Update(task model.Task) error {
 	query := `
@@ -101,7 +117,7 @@ func (r *SQLiteTaskRepository) Update(task model.Task) error {
 	return nil
 }
 
-// Delete removes a task from the database by its ID
+// Delete a task from the database by its ID
 func (r *SQLiteTaskRepository) Delete(id int) error {
 	query := `DELETE FROM tasks WHERE id = ?`
 
