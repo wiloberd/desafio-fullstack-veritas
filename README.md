@@ -72,6 +72,15 @@ O servidor iniciará por padrão em http://localhost:8080
 
 - **Respostas JSON Padronizadas e Validações de Payload:** Tratamento de erros HTTP (400 Bad Request, 404 Not Found, 500 Internal Server Error) com payloads e estruturas em JSON usando struct tags (json:"id", json:"title", etc.).
 
+
+#### Decisões de Design e Arquitetura da API
+
+* **Uso de DTOs (Data Transfer Objects):** Separação estrita entre os modelos de persistência (`model.Task`) e os contratos de entrada HTTP (`dto.CreateTaskInput` e `dto.UpdateTaskInput`).
+* **Segurança e Imutabilidade com `DisallowUnknownFields`:** O decodificador JSON rejeita estritamente payloads com propriedades não mapeadas (ex: tentativas de injetar `id` no corpo da requisição), retornando erros 400 descritivos com os campos esperados (`expected_fields`).
+* **Ciclo de Vida Determinístico:** Tarefas criadas via `POST /api/tasks` nascem obrigatoriamente com o status `todo` atribuído pelo backend, centralizando a regra de negócio e evitando inconsistências de estado no momento da criação.
+* **REST Semântico:** Identificadores únicos (`id`) são manipulados exclusivamente via parâmetros de rota na URL (`/api/tasks/{id}`) para operações de consulta, atualização e exclusão.
+
+
 ## Limitações conhecidas
 ### 1.Frontend: React
 
