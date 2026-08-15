@@ -34,8 +34,6 @@ dist-ssr
 *.dll
 *.so
 *.dylib
-backend/server
-server
 
 # Banco de dados local SQLite
 *backend/data/kanban.db
