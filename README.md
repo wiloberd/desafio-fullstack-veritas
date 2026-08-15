@@ -8,8 +8,30 @@ Mini Kanban de tarefas desenvolvido com React e Go como desafio técnico para pr
 - **Backend:** Go (Golang)
 - **Versionamento:** Git
 
+## ## Instruções para executar a Aplicação com Docker (Recomendado)
 
-## Instruções para Rodar a Aplicação
+O projeto foi totalmente conteinerizado para facilitar a avaliação, garantindo que o frontend (React/Vite) e o backend (Go) rodem perfeitamente sem a necessidade de instalar as linguagens na máquina local.
+
+### Pré-requisitos
+* [Docker](https://www.docker.com/get-started)
+* Docker Compose
+
+### Passo a Passo
+1. Clone o repositório:
+  - git clone <url-do-seu-repositorio>
+  - cd desafio-fullstack-veritas
+
+2. Suba a infraestrutura:
+  - docker-compose up --build
+
+3. Acesse a aplicação:
+  - Frontend (Interface): http://localhost:5173
+  - Backend (API): http://localhost:8080
+
+**Nota sobre Persistência de Dados:** O banco de dados SQLite utilizado pelo backend está configurado com um bind mount. Isso significa que os dados (suas tarefas criadas) serão salvos na pasta ./backend/data da sua máquina e não serão perdidos ao reiniciar os contêineres.
+
+
+## Instruções para Rodar a Aplicação loalmente
 
 ### 1. Pré-requisitos
 Certifique-se de ter instalado em sua máquina:
