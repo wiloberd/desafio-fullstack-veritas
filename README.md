@@ -21,6 +21,14 @@ O projeto foi totalmente conteinerizado para facilitar a avaliação, garantindo
   - git clone <url-do-seu-repositorio>
   - cd desafio-fullstack-veritas
 
+**Obs: Importante!** Se esta é a primeira vez que você está executando o projeto na sua maquina usando Docker, copie o banco SQLite (kanban.db) base para que a pasta de volume possa carregar os dados iniciais. Usando o seu terminal, execute o comando:
+
+**No Linux ou macOS:**
+- cp kanban.db data/kanban.db
+
+**No Windows (CMD ou PowerShell)**
+- copy kanban.db data\kanban.db
+
 2. Suba a infraestrutura:
   - docker-compose up --build
 
