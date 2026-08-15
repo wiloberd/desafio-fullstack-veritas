@@ -1,8 +1,17 @@
 
 export function TaskCard({ task, onEdit, onDelete }) {
 
+
+  const handleDragStart = (e) => {
+    e.dataTransfer.setData("taskId", task.id);
+  };
+
   return (
-    <li className="task-item">
+    <li className="task-item"
+      draggable 
+      onDragStart={handleDragStart} 
+      style={{ cursor: 'grab' }} // Deixa o mouse com ícone de mãozinha
+    >
       <div className="task-item-box">
         <div className="task-item-header-box">
           <h3>{task?.title}</h3>

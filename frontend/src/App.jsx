@@ -116,6 +116,41 @@ function App() {
   if (loading) return <div>Carregando quadro...</div>;
   if (error) return <div style={{ color: 'red' }}>{error}</div>;
 
+
+  const allowDrop = (e) => {
+      e.preventDefault();
+    };
+
+    // DROP CARD
+  const handleDrop = async (e, novoStatus) => {
+    e.preventDefault();
+    
+    // ID capturado do handleDragStart
+    const taskId = e.dataTransfer.getData("taskId");
+    
+    const taskMovida = tasks.find(t => t.id.toString() === taskId.toString());
+    
+    if (!taskMovida || taskMovida.status === novoStatus) return;
+
+    try {
+      const taskAtualizada = {
+          title: taskMovida.title,
+          description: taskMovida.description,
+          status: novoStatus
+        };
+
+       const tarefaSalva = await taskService.updateTask(taskId, taskAtualizada);
+      
+      // Atualiza o array na tela
+      setTasks((prevTasks) => 
+        prevTasks.map((t) => (t.id === taskId ? tarefaSalva : t))
+      );
+
+    } catch (error) {
+      console.error("Erro ao mover:", error);
+    }
+  };
+
   return ( 
     <>
       <main className="app">
@@ -144,7 +179,10 @@ function App() {
               </div>
             </div>
 
-             <div className="column-content">
+             <div className="column-content" 
+                onDragOver={allowDrop} 
+                onDrop={(e) => handleDrop(e, "todo")}>
+
                   <TaskCreateForm onSubmit={handleCreateTask} />
 
                   <TaskList
@@ -166,7 +204,10 @@ function App() {
               </div>
             </div>
 
-            <div className="column-content">
+             <div className="column-content" 
+                onDragOver={allowDrop} 
+                onDrop={(e) => handleDrop(e, "in_progress")}>
+
                 <TaskList
                     tasks={progress}
                     editingTaskId={editingTaskId}
@@ -186,7 +227,10 @@ function App() {
               </div>
             </div>
 
-            <div className="column-content">
+             <div className="column-content" 
+                onDragOver={allowDrop} 
+                onDrop={(e) => handleDrop(e, "done")}>
+
                 <TaskList
                     tasks={done}
                     editingTaskId={editingTaskId}

@@ -108,8 +108,21 @@
 
 .task-item:hover {
   border-color: #0066cc;
-  cursor: pointer;
+  cursor: grab;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-item.dragging {
+  opacity: 0.4;
+  border: 2px dashed #888;
+  box-shadow: none;
+}
+
+/* Efeito na coluna quando o card passa por cima dela */
+.column.drag-over {
+  background-color: #e2e8f0 !important; /* Um cinza/azulado suave */
+  border: 2px dashed #646cff; /* Borda para mostrar que é ali o alvo */
+  transition: all 0.2s ease;
 }
 
 .task-item-box {
